@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhb.saoliao.dao.MyFriendsDao">
+
+    <resultMap type="com.lhb.saoliao.entity.MyFriends" id="MyFriendsMap">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="myUserId" column="my_user_id" jdbcType="VARCHAR"/>
+        <result property="myFriendUserId" column="my_friend_user_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="MyFriendsMap">
+        select
+          id, my_user_id, my_friend_user_id
+        from netty.my_friends
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="MyFriendsMap">
+        select
+          id, my_user_id, my_friend_user_id
+        from netty.my_friends
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="MyFriendsMap">
+        select
+          id, my_user_id, my_friend_user_id
+        from netty.my_friends
+        <where>
+            <if test="id != null and id != ''">
+                and id = #{id}
+            </if>
+            <if test="myUserId != null and myUserId != ''">
+                and my_user_id = #{myUserId}
+            </if>
+            <if test="myFriendUserId != null and myFriendUserId != ''">
+                and my_friend_user_id = #{myFriendUserId}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into netty.my_friends(my_user_id, my_friend_user_id)
+        values (#{myUserId}, #{myFriendUserId})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update netty.my_friends
+        <set>
+            <if test="myUserId != null and myUserId != ''">
+                my_user_id = #{myUserId},
+            </if>
+            <if test="myFriendUserId != null and myFriendUserId != ''">
+                my_friend_user_id = #{myFriendUserId},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from netty.my_friends where id = #{id}
+    </delete>
+
+</mapper>

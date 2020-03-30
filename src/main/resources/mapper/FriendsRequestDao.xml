@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhb.saoliao.dao.FriendsRequestDao">
+
+    <resultMap type="com.lhb.saoliao.entity.FriendsRequest" id="FriendsRequestMap">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="sendUserId" column="send_user_id" jdbcType="VARCHAR"/>
+        <result property="acceptUserId" column="accept_user_id" jdbcType="VARCHAR"/>
+        <result property="requestDateTime" column="request_date_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="FriendsRequestMap">
+        select
+          id, send_user_id, accept_user_id, request_date_time
+        from netty.friends_request
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="FriendsRequestMap">
+        select
+          id, send_user_id, accept_user_id, request_date_time
+        from netty.friends_request
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="FriendsRequestMap">
+        select
+          id, send_user_id, accept_user_id, request_date_time
+        from netty.friends_request
+        <where>
+            <if test="id != null and id != ''">
+                and id = #{id}
+            </if>
+            <if test="sendUserId != null and sendUserId != ''">
+                and send_user_id = #{sendUserId}
+            </if>
+            <if test="acceptUserId != null and acceptUserId != ''">
+                and accept_user_id = #{acceptUserId}
+            </if>
+            <if test="requestDateTime != null">
+                and request_date_time = #{requestDateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into netty.friends_request(send_user_id, accept_user_id, request_date_time)
+        values (#{sendUserId}, #{acceptUserId}, #{requestDateTime})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update netty.friends_request
+        <set>
+            <if test="sendUserId != null and sendUserId != ''">
+                send_user_id = #{sendUserId},
+            </if>
+            <if test="acceptUserId != null and acceptUserId != ''">
+                accept_user_id = #{acceptUserId},
+            </if>
+            <if test="requestDateTime != null">
+                request_date_time = #{requestDateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from netty.friends_request where id = #{id}
+    </delete>
+
+</mapper>

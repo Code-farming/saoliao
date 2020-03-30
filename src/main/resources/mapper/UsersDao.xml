@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lhb.saoliao.dao.UsersDao">
+
+    <resultMap type="com.lhb.saoliao.entity.Users" id="UsersMap">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="faceImage" column="face_image" jdbcType="VARCHAR"/>
+        <result property="faceImageBig" column="face_image_big" jdbcType="VARCHAR"/>
+        <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
+        <result property="qrcode" column="qrcode" jdbcType="VARCHAR"/>
+        <result property="cid" column="cid" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="UsersMap">
+        select
+          id, username, password, face_image, face_image_big, nickname, qrcode, cid
+        from netty.users
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="UsersMap">
+        select
+          id, username, password, face_image, face_image_big, nickname, qrcode, cid
+        from netty.users
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="UsersMap">
+        select
+        id, username, password, face_image, face_image_big, nickname, qrcode, cid
+        from netty.users
+        <where>
+            <if test="id != null and id != ''">
+                and id = #{id}
+            </if>
+            <if test="username != null and username != ''">
+                and username = #{username}
+            </if>
+            <if test="password != null and password != ''">
+                and password = #{password}
+            </if>
+            <if test="faceImage != null and faceImage != ''">
+                and face_image = #{faceImage}
+            </if>
+            <if test="faceImageBig != null and faceImageBig != ''">
+                and face_image_big = #{faceImageBig}
+            </if>
+            <if test="nickname != null and nickname != ''">
+                and nickname = #{nickname}
+            </if>
+            <if test="qrcode != null and qrcode != ''">
+                and qrcode = #{qrcode}
+            </if>
+            <if test="cid != null and cid != ''">
+                and cid = #{cid}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryByUsername" resultType="com.lhb.saoliao.entity.Users">
+        select id, username, password, face_image, face_image_big, nickname, qrcode, cid
+        from netty.users
+        where username=#{username}
+    </select>
+
+    <select id="queryByNameAndPwd" resultType="com.lhb.saoliao.entity.Users">
+        select id, username, password, face_image, face_image_big, nickname, qrcode, cid
+        from netty.users
+        where username=#{username} and password=#{password}
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into netty.users(username, password, face_image, face_image_big, nickname, qrcode, cid)
+        values (#{username}, #{password}, #{faceImage}, #{faceImageBig}, #{nickname}, #{qrcode}, #{cid})
+    </insert>
+
+    <insert id="addUser">
+        insert into netty.users(id, username, password, face_image, face_image_big, nickname, qrcode, cid)
+        values (#{id},#{username}, #{password}, #{faceImage}, #{faceImageBig}, #{nickname}, #{qrcode}, #{cid})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update netty.users
+        <set>
+            <if test="username != null and username != ''">
+                username = #{username},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="faceImage != null and faceImage != ''">
+                face_image = #{faceImage},
+            </if>
+            <if test="faceImageBig != null and faceImageBig != ''">
+                face_image_big = #{faceImageBig},
+            </if>
+            <if test="nickname != null and nickname != ''">
+                nickname = #{nickname},
+            </if>
+            <if test="qrcode != null and qrcode != ''">
+                qrcode = #{qrcode},
+            </if>
+            <if test="cid != null and cid != ''">
+                cid = #{cid},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from netty.users where id = #{id}
+    </delete>
+
+</mapper>
